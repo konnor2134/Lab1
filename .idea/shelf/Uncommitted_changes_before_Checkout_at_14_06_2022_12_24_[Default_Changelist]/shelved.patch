@@ -1,0 +1,548 @@
+Index: src/main/java/ua/edu/sumdu/j2se/budko/tasks/LinkedTaskList.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ua.edu.sumdu.j2se.budko.tasks;\r\n\r\npublic class LinkedTaskList extends AbstractTaskList {\r\n    private Node first;\r\n    private Node last;\r\n    private int size;\r\n\r\n    private static class Node {\r\n        Task task;\r\n        Node prev;\r\n        Node next;\r\n\r\n        Node(Task task) {\r\n            this.task = task;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void add(Task task) throws NullPointerException {\r\n        if(task == null)\r\n            throw new NullPointerException(\"The task cannot be null\");\r\n\r\n        Node node = new Node(task);\r\n\r\n        if (first == null)\r\n            first = node;\r\n        else {\r\n            last.next = node;\r\n            node.prev = last;\r\n        }\r\n        last = node;\r\n        size++;\r\n    }\r\n\r\n    @Override\r\n    public boolean remove(Task task) {\r\n        for (Node temp = first; temp != null; temp = temp.next) {\r\n            if (temp.task == task) {\r\n                if (temp.prev == null) {\r\n                    first = temp.next;\r\n                }\r\n                else if (temp.next == null) {\r\n                    last = temp.prev;\r\n                }\r\n                else {\r\n                    temp.next.prev = temp.prev;\r\n                    temp.prev.next = temp.next;\r\n                }\r\n\r\n                size--;\r\n                return true;\r\n            }\r\n        }\r\n\r\n        return false;\r\n    }\r\n\r\n    @Override\r\n    public int size() {\r\n        return size;\r\n    }\r\n\r\n    @Override\r\n    public Task getTask(int index) throws IndexOutOfBoundsException {\r\n        if (index >= size || index < 0)\r\n            throw new IndexOutOfBoundsException(\"Index is out of bounds\");\r\n\r\n        Node temp;\r\n\r\n        if (index < (size / 2)) {\r\n            temp = first;\r\n            for (int i = 0; i < index; i++)\r\n                temp = temp.next;\r\n        }\r\n        else {\r\n            temp = last;\r\n            for (int i = size - 1; i > index; i--)\r\n                temp = temp.prev;\r\n        }\r\n\r\n        return temp.task;\r\n    }\r\n\r\n    @Override\r\n    public ListTypes.types getType() {\r\n        return ListTypes.types.LINKED;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/ua/edu/sumdu/j2se/budko/tasks/LinkedTaskList.java b/src/main/java/ua/edu/sumdu/j2se/budko/tasks/LinkedTaskList.java
+--- a/src/main/java/ua/edu/sumdu/j2se/budko/tasks/LinkedTaskList.java	
++++ b/src/main/java/ua/edu/sumdu/j2se/budko/tasks/LinkedTaskList.java	
+@@ -1,10 +1,14 @@
+ package ua.edu.sumdu.j2se.budko.tasks;
+ 
++import java.util.Iterator;
++import java.util.Objects;
++
+ public class LinkedTaskList extends AbstractTaskList {
+     private Node first;
+     private Node last;
+     private int size;
+ 
++
+     private static class Node {
+         Task task;
+         Node prev;
+@@ -15,6 +19,7 @@
+         }
+     }
+ 
++
+     @Override
+     public void add(Task task) throws NullPointerException {
+         if(task == null)
+@@ -32,6 +37,7 @@
+         size++;
+     }
+ 
++
+     @Override
+     public boolean remove(Task task) {
+         for (Node temp = first; temp != null; temp = temp.next) {
+@@ -85,4 +91,83 @@
+     public ListTypes.types getType() {
+         return ListTypes.types.LINKED;
+     }
++
++    @Override
++    public Iterator<Task> iterator() {
++        return new Itr();
++    }
++
++    private class Itr implements Iterator<Task> {
++        Node lastReturned;
++        Node next = first;
++        int nextIndex;
++
++        @Override
++        public boolean hasNext() {
++            return nextIndex < size;
++        }
++
++        @Override
++        public Task next() {
++            if (!hasNext())
++                throw new IndexOutOfBoundsException();
++
++            lastReturned = next;
++            next = next.next;
++            nextIndex++;
++            return lastReturned.task;
++        }
++
++        @Override
++        public void remove() {
++            if (lastReturned == null)
++                throw new IllegalStateException();
++
++            Node lastNext = lastReturned.next;
++            LinkedTaskList.this.remove(lastReturned.task);
++            if (next == lastReturned)
++                next = lastNext;
++            else
++                nextIndex--;
++            lastReturned = null;
++        }
++    }
++
++    @Override
++    public boolean equals(Object o) {
++        if (this == o) return true;
++        if (o == null || getClass() != o.getClass()) return false;
++        LinkedTaskList that = (LinkedTaskList) o;
++        if (size != that.size) return false;
++
++        Iterator<Task> j = iterator();
++        for (Object obj: that) {
++            if (!j.next().equals(obj))
++                return false;
++        }
++
++        return true;
++    }
++
++    @Override
++    public int hashCode() {
++        return Objects.hash(size, last.task.getTitle(), last.task.getStartTime());
++    }
++
++    @Override
++    public LinkedTaskList clone() {
++        LinkedTaskList clone = new LinkedTaskList();
++
++        for (Task o: this) {
++            clone.add(o);
++        }
++        clone.size = size;
++
++        return clone;
++    }
++
++    @Override
++    public String toString() {
++        return String.format("LinkedTaskList{size=%d}", size);
++    }
+ }
+\ No newline at end of file
+Index: src/main/java/ua/edu/sumdu/j2se/budko/tasks/ArrayTaskList.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ua.edu.sumdu.j2se.budko.tasks;\r\n\r\n\r\npublic class ArrayTaskList extends AbstractTaskList {\r\n    private Task[] tasks = new Task[10];\r\n    private int size;\r\n\r\n    @Override\r\n    public void add (Task task) throws NullPointerException {\r\n        if (task == null)\r\n            throw new NullPointerException(\"The task cannot be null\");\r\n\r\n        if (size >= tasks.length) {\r\n            Task[] tasksCopy = tasks;\r\n            tasks = new Task[tasks.length * 2];\r\n\r\n            System.arraycopy(tasksCopy, 0, tasks, 0, tasksCopy.length);\r\n\r\n        }\r\n            tasks[size] = task;\r\n            size++;\r\n    }\r\n\r\n    @Override\r\n    public boolean remove (Task task){\r\n        int index = -1;\r\n        for (int i = 0; i < size; i++)\r\n            if (tasks[i] == task) {\r\n                    index = i;\r\n                    break;\r\n                }\r\n\r\n            if (index == -1)\r\n                return false;\r\n\r\n            tasks[index] = null;\r\n            for (int i = index + 1; i < size; i++) {\r\n                tasks[i - 1] = tasks[i];\r\n                tasks[i] = null;\r\n            }\r\n            size--;\r\n\r\n            return true;\r\n        }\r\n\r\n    @Override\r\n    public int size () {\r\n        return size;\r\n    }\r\n\r\n    @Override\r\n    public Task getTask ( int index) throws IndexOutOfBoundsException {\r\n        if (index >= size || index < 0)\r\n            throw new IndexOutOfBoundsException(\"Index is out of bounds\");\r\n\r\n                return tasks[index];\r\n    }\r\n\r\n    @Override\r\n    public ListTypes.types getType() {\r\n        return ListTypes.types.ARRAY;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/ua/edu/sumdu/j2se/budko/tasks/ArrayTaskList.java b/src/main/java/ua/edu/sumdu/j2se/budko/tasks/ArrayTaskList.java
+--- a/src/main/java/ua/edu/sumdu/j2se/budko/tasks/ArrayTaskList.java	
++++ b/src/main/java/ua/edu/sumdu/j2se/budko/tasks/ArrayTaskList.java	
+@@ -1,5 +1,8 @@
+ package ua.edu.sumdu.j2se.budko.tasks;
+ 
++import java.util.Arrays;
++import java.util.Iterator;
++import java.util.Objects;
+ 
+ public class ArrayTaskList extends AbstractTaskList {
+     private Task[] tasks = new Task[10];
+@@ -17,8 +20,8 @@
+             System.arraycopy(tasksCopy, 0, tasks, 0, tasksCopy.length);
+ 
+         }
+-            tasks[size] = task;
+-            size++;
++        tasks[size] = task;
++        size++;
+     }
+ 
+     @Override
+@@ -26,22 +29,22 @@
+         int index = -1;
+         for (int i = 0; i < size; i++)
+             if (tasks[i] == task) {
+-                    index = i;
+-                    break;
+-                }
++                index = i;
++                break;
++            }
+ 
+-            if (index == -1)
+-                return false;
++        if (index == -1)
++            return false;
+ 
+-            tasks[index] = null;
+-            for (int i = index + 1; i < size; i++) {
+-                tasks[i - 1] = tasks[i];
+-                tasks[i] = null;
+-            }
+-            size--;
++        tasks[index] = null;
++        for (int i = index + 1; i < size; i++) {
++            tasks[i - 1] = tasks[i];
++            tasks[i] = null;
++        }
++        size--;
+ 
+-            return true;
+-        }
++        return true;
++    }
+ 
+     @Override
+     public int size () {
+@@ -53,11 +56,80 @@
+         if (index >= size || index < 0)
+             throw new IndexOutOfBoundsException("Index is out of bounds");
+ 
+-                return tasks[index];
++        return tasks[index];
+     }
+ 
+     @Override
+     public ListTypes.types getType() {
+         return ListTypes.types.ARRAY;
+     }
++
++    @Override
++    public Iterator<Task> iterator() {
++        return new Itr();
++    }
++
++    private class Itr implements Iterator<Task> {
++        int cursor;
++        int lastReturned = -1;
++
++        @Override
++        public boolean hasNext() {
++            return cursor < size;
++        }
++
++        @Override
++        public Task next() {
++            int i = cursor;
++            if (i >= size)
++                throw new IndexOutOfBoundsException();
++
++            cursor++;
++            return tasks[lastReturned = i];
++        }
++
++        @Override
++        public void remove() {
++            if (lastReturned < 0)
++                throw new IllegalStateException();
++
++            ArrayTaskList.this.remove(getTask(lastReturned));
++            cursor = lastReturned;
++            lastReturned = -1;
++        }
++    }
++
++    @Override
++    public boolean equals(Object o) {
++        if (this == o) return true;
++        if (o == null || getClass() != o.getClass()) return false;
++        ArrayTaskList that = (ArrayTaskList) o;
++        if (size != that.size) return false;
++
++        for (int i = 0; i < size; i++) {
++            if (!tasks[i].equals(that.tasks[i]))
++                return false;
++        }
++        return true;
++    }
++
++    @Override
++    public int hashCode() {
++        return Objects.hash(size, tasks[0].getStartTime(), tasks[0].getTitle());
++    }
++
++    @Override
++    public ArrayTaskList clone() {
++        ArrayTaskList arrayTaskList = new ArrayTaskList();
++        arrayTaskList.tasks = Arrays.copyOf(tasks, size);
++        arrayTaskList.size = size;
++        return arrayTaskList;
++    }
++
++    @Override
++    public String toString() {
++        return String.format("ArrayTaskList{size = %d}", size);
++    }
++
++
+ }
+\ No newline at end of file
+Index: src/main/java/ua/edu/sumdu/j2se/budko/tasks/Task.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ua.edu.sumdu.j2se.budko.tasks;\r\n\r\npublic class Task {\r\n\r\n    private String title;\r\n    private int time;\r\n    private int interval;\r\n    private int start;\r\n    private int end;\r\n    private boolean isRepeated;\r\n    private boolean active;\r\n\r\n    /**\r\n     * Конструктор - создает неактивную задачу, которая выполняется за время без повторения с заданным названием.\r\n     * @param title - название задачи.\r\n     * @param time - время выполнения.\r\n     */\r\n    public Task(String title, int time) throws IllegalArgumentException {\r\n        if (title == null || time < 0) {\r\n            throw new IllegalArgumentException(\"The title cannot be null and the time cannot be a negative\");\r\n        }\r\n        this.title = title;\r\n        this.time = time;\r\n        this.isRepeated = false;\r\n    }\r\n\r\n    /**\r\n     * Конструктор - создает неактивную задачу, выполняемую в промежутке времени  с интервалом и имеющее заданное название.\r\n     * @param title - название задачи.\r\n     * @param start - время начала выполнения задачи.\r\n     * @param end - время конца выполнения задачи.\r\n     * @param interval - интервал повторений выполнения задачи.\r\n     */\r\n    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {\r\n        if (title == null || interval < 0) {\r\n            throw new IllegalArgumentException(\"The title cannot be null and the interval cannot be a negative\");\r\n        }\r\n        this.title = title;\r\n        this.start = start;\r\n        this.end = end;\r\n        this.interval = interval;\r\n        this.isRepeated = true;\r\n    }\r\n\r\n    /**\r\n     * Возвращает название задачи.\r\n     * @return название задачи.\r\n     */\r\n    public String getTitle() {\r\n        return title;\r\n    }\r\n\r\n    /**\r\n     * Устанавливает название задачи.\r\n     * @param title - название задачи.\r\n     */\r\n    public void setTitle(String title) {\r\n\r\n        this.title = title;\r\n    }\r\n\r\n    /**\r\n     * @return - возвращает состояние активности задачи.\r\n     */\r\n    public boolean isActive() {\r\n        return active;\r\n    }\r\n\r\n    /**\r\n     * Устанавливает активность задачи.\r\n     * @param active – true означает, что задача становится активной, false – неактивна.\r\n     */\r\n    public void setActive(boolean active) {\r\n        this.active = active;\r\n    }\r\n\r\n    /**\r\n     * Метод для работы со временем у неповторяющихся задач.\r\n     * @return - возвращает время выполнения задачи. Если задача повторяемая – возвращает время начала выполнения задачи.\r\n     */\r\n    public int getTime() {\r\n        if (isRepeated) {\r\n            return start;\r\n        }\r\n        return time;\r\n    }\r\n\r\n    /**\r\n     * Метод, при котором если задача повторялась, она должна стать такой, что не повторяется.\r\n     */\r\n    public void setTime(int time) {\r\n\r\n        this.time = time;\r\n        isRepeated = false;\r\n    }\r\n\r\n    /**\r\n     * В случае, если задача не повторяется, метод должен возвращать время выполнения задачи.\r\n     */\r\n    public int getStartTime() {\r\n        if (!isRepeated) {\r\n            return time;\r\n        }\r\n        return start;\r\n    }\r\n    /**\r\n     * В случае, если задача не повторяется, метод должен возвращать время выполнения задачи.\r\n     */\r\n    public int getEndTime() {\r\n        if (!isRepeated) {\r\n            return time;\r\n        }\r\n        return end;\r\n    }\r\n\r\n    /**\r\n     * В случае, если задача не повторяется, метод должен возвращать 0.\r\n     */\r\n    public int getRepeatInterval() {\r\n        if (!isRepeated) {\r\n            return 0;\r\n        }\r\n        return interval;\r\n    }\r\n\r\n    /**\r\n     * В случае, если задача не повторяется, метод должен стать повторяющимся.\r\n     */\r\n    public void setTime(int start, int end, int interval) {\r\n\r\n        this.start = start;\r\n        this.end = end;\r\n        this.interval = interval;\r\n        this.isRepeated = true;\r\n    }\r\n\r\n    public boolean isRepeated() {\r\n        return isRepeated;\r\n    }\r\n\r\n    public int nextTimeAfter(int current) {\r\n\r\n        if (!isActive()) return -1;\r\n\r\n        if (isRepeated) {\r\n\r\n            if (start > current) {\r\n                return start;\r\n            }\r\n            int nextTime = start;\r\n            while (nextTime <= current) {\r\n                nextTime += interval;\r\n                if (nextTime >= end) return -1;\r\n            }\r\n            return nextTime;\r\n        }\r\n        else {\r\n            if (time > current) return time;\r\n            else return -1;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/ua/edu/sumdu/j2se/budko/tasks/Task.java b/src/main/java/ua/edu/sumdu/j2se/budko/tasks/Task.java
+--- a/src/main/java/ua/edu/sumdu/j2se/budko/tasks/Task.java	
++++ b/src/main/java/ua/edu/sumdu/j2se/budko/tasks/Task.java	
+@@ -1,14 +1,20 @@
+ package ua.edu.sumdu.j2se.budko.tasks;
+ 
++import java.util.Objects;
++
+ public class Task {
+ 
+     private String title;
+     private int time;
+-    private int interval;
+     private int start;
+     private int end;
+-    private boolean isRepeated;
+-    private boolean active;
++    private int interval;
++    private boolean active = false;
++
++    public Task() {
++        title = "No title";
++        time = start = end = interval = 0;
++    }
+ 
+     /**
+      * Конструктор - создает неактивную задачу, которая выполняется за время без повторения с заданным названием.
+@@ -16,12 +22,15 @@
+      * @param time - время выполнения.
+      */
+     public Task(String title, int time) throws IllegalArgumentException {
+-        if (title == null || time < 0) {
++        if (time < 0)
+             throw new IllegalArgumentException("The title cannot be null and the time cannot be a negative");
+-        }
++
+         this.title = title;
+         this.time = time;
+-        this.isRepeated = false;
++        start = time;
++        end = start;
++        interval = 0;
++
+     }
+ 
+     /**
+@@ -32,15 +41,67 @@
+      * @param interval - интервал повторений выполнения задачи.
+      */
+     public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+-        if (title == null || interval < 0) {
++        if (start < 0 || end < 0 || interval < 0)
+             throw new IllegalArgumentException("The title cannot be null and the interval cannot be a negative");
+-        }
++
+         this.title = title;
+         this.start = start;
+         this.end = end;
+         this.interval = interval;
+-        this.isRepeated = true;
++        time = start;
++    }
++
++    @Override
++    public boolean equals(Object o) {
++        if (this == o) return true;
++        if (o == null || getClass() != o.getClass()) return false;
++        Task task = (Task) o;
++        if (!active && !task.active)
++            return true;
++
++        if (isRepeated())
++            return start == task.start && end == task.end && interval == task.interval;
++        else
++            return time == task.time;
+     }
++
++    @Override
++    public int hashCode() {
++        return Objects.hash(time, title);
++    }
++
++    @Override
++    public Task clone() {
++        Task task = new Task();
++        task.title = title;
++        task.time = time;
++        task.start = start;
++        task.end = end;
++        task.interval = interval;
++        task.active = active;
++        return task;
++    }
++
++    @Override
++    public String toString() {
++        if (!isRepeated()) {
++            return "Task{" +
++                    "title='" + title + '\'' +
++                    ", time=" + time +
++                    ", active=" + active +
++                    '}';
++        } else {
++            return "Task{" +
++                    "title='" + title + '\'' +
++                    ", time=" + time +
++                    ", start=" + start +
++                    ", end=" + end +
++                    ", interval=" + interval +
++                    ", active=" + active +
++                    '}';
++        }
++    }
++
+ 
+     /**
+      * Возвращает название задачи.
+@@ -79,9 +140,7 @@
+      * @return - возвращает время выполнения задачи. Если задача повторяемая – возвращает время начала выполнения задачи.
+      */
+     public int getTime() {
+-        if (isRepeated) {
+-            return start;
+-        }
++
+         return time;
+     }
+ 
+@@ -91,25 +150,25 @@
+     public void setTime(int time) {
+ 
+         this.time = time;
+-        isRepeated = false;
++
++        if(interval != 0) {
++            start = time;
++            end = start;
++            interval = 0;
++        }
+     }
+-
+     /**
+      * В случае, если задача не повторяется, метод должен возвращать время выполнения задачи.
+      */
+     public int getStartTime() {
+-        if (!isRepeated) {
+-            return time;
+-        }
++
+         return start;
+     }
+     /**
+      * В случае, если задача не повторяется, метод должен возвращать время выполнения задачи.
+      */
+     public int getEndTime() {
+-        if (!isRepeated) {
+-            return time;
+-        }
++
+         return end;
+     }
+ 
+@@ -117,9 +176,7 @@
+      * В случае, если задача не повторяется, метод должен возвращать 0.
+      */
+     public int getRepeatInterval() {
+-        if (!isRepeated) {
+-            return 0;
+-        }
++
+         return interval;
+     }
+ 
+@@ -128,35 +185,35 @@
+      */
+     public void setTime(int start, int end, int interval) {
+ 
++        if(this.interval == 0)
++            time = start;
+         this.start = start;
+         this.end = end;
+         this.interval = interval;
+-        this.isRepeated = true;
+     }
+ 
+     public boolean isRepeated() {
+-        return isRepeated;
++        return interval != 0;
+     }
+ 
+     public int nextTimeAfter(int current) {
+-
+-        if (!isActive()) return -1;
+-
+-        if (isRepeated) {
++        if(!isActive()) return -1;
++        if(isRepeated()) {
++            int countOfInterval = (end - start) / interval;
++            if(current >= start + interval * countOfInterval)
++                return -1;
++            else {
+ 
+-            if (start > current) {
+-                return start;
++                int a = (current - start) >= 0 ? (current - start) : -interval;
++                int intervalNumber = (int)(((double)a / interval) + 1.0);
++                return start + interval * intervalNumber;
+             }
+-            int nextTime = start;
+-            while (nextTime <= current) {
+-                nextTime += interval;
+-                if (nextTime >= end) return -1;
+-            }
+-            return nextTime;
+         }
+         else {
+-            if (time > current) return time;
+-            else return -1;
++            if (current >= time)
++                return -1;
++            else
++                return time;
+         }
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/ua/edu/sumdu/j2se/Budko/tasks/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ua.edu.sumdu.j2se.Budko.tasks;\r\n\r\npublic class Main {\r\n\tTask task = new Task (\"task1\", 1,2,3);\r\n\r\n\tpublic static void main(String[] args) {\r\n\t\tSystem.out.println(\"Hello\");\r\n\t}\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/ua/edu/sumdu/j2se/Budko/tasks/Main.java b/src/main/java/ua/edu/sumdu/j2se/Budko/tasks/Main.java
+--- a/src/main/java/ua/edu/sumdu/j2se/Budko/tasks/Main.java	
++++ b/src/main/java/ua/edu/sumdu/j2se/Budko/tasks/Main.java	
+@@ -1,9 +1,7 @@
+-package ua.edu.sumdu.j2se.Budko.tasks;
++package ua.edu.sumdu.j2se.budko.tasks;
++
++import java.util.Iterator;
+ 
+ public class Main {
+-	Task task = new Task ("task1", 1,2,3);
+ 
+-	public static void main(String[] args) {
+-		System.out.println("Hello");
+-	}
+-}
++
+Index: src/main/java/ua/edu/sumdu/j2se/budko/tasks/AbstractTaskList.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ua.edu.sumdu.j2se.budko.tasks;\r\n\r\npublic abstract class AbstractTaskList {\r\n    public abstract void add(Task task) throws NullPointerException;\r\n    public abstract boolean remove(Task task);\r\n    public abstract int size();\r\n    public abstract Task getTask(int index) throws IndexOutOfBoundsException;\r\n    public abstract ListTypes.types getType();\r\n\r\n    public AbstractTaskList incoming(int from, int to) {\r\n        AbstractTaskList taskList = TaskListFactory.createTaskList(getType());\r\n        Task task;\r\n\r\n        for (int i = 0; i < taskList.size(); i++) {\r\n            task = taskList.getTask(i);\r\n            if (task.nextTimeAfter(from) != -1 && task.nextTimeAfter(to) == -1)\r\n                taskList.add(task);\r\n        }\r\n\r\n        return taskList;\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/src/main/java/ua/edu/sumdu/j2se/budko/tasks/AbstractTaskList.java b/src/main/java/ua/edu/sumdu/j2se/budko/tasks/AbstractTaskList.java
+--- a/src/main/java/ua/edu/sumdu/j2se/budko/tasks/AbstractTaskList.java	
++++ b/src/main/java/ua/edu/sumdu/j2se/budko/tasks/AbstractTaskList.java	
+@@ -1,6 +1,6 @@
+ package ua.edu.sumdu.j2se.budko.tasks;
+ 
+-public abstract class AbstractTaskList {
++public abstract class AbstractTaskList implements java.lang.Iterable<Task>  {
+     public abstract void add(Task task) throws NullPointerException;
+     public abstract boolean remove(Task task);
+     public abstract int size();

@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.budko.tasks;
+package ua.edu.sumdu.j2se.budko.tasks.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

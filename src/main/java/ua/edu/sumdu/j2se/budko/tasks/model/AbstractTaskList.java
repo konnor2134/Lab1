@@ -1,9 +1,9 @@
-package ua.edu.sumdu.j2se.budko.tasks;
+package ua.edu.sumdu.j2se.budko.tasks.model;
 
 import java.util.stream.Stream;
 import java.io.Serializable;
 
-public abstract class AbstractTaskList implements java.lang.Iterable<Task>, Serializable  {
+public abstract class AbstractTaskList implements java.lang.Iterable<Task>, Serializable {
     public abstract void add(Task task) throws NullPointerException;
     public abstract boolean remove(Task task);
     public abstract int size();

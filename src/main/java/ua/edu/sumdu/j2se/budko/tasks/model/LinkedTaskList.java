@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.budko.tasks;
+package ua.edu.sumdu.j2se.budko.tasks.model;
 
 import java.util.Iterator;
 import java.util.stream.Stream;
@@ -175,11 +175,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("LinkedTaskList{\n");
+
         for (Task task: this) {
-            stringBuilder.append(task).append(",").append("\n");
+            stringBuilder.append(task).append(";").append("\n");
         }
-        stringBuilder.append("}\n");
 
         return stringBuilder.toString();
     }

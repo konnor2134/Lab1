@@ -1,7 +1,7 @@
-package ua.edu.sumdu.j2se.budko.tasks;
+package ua.edu.sumdu.j2se.budko.tasks.model;
 
-import java.time.LocalDateTime;
 import java.util.*;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -45,7 +45,6 @@ public class Tasks {
                 taskSet.add(task);
             }
         }
-
         return calendar;
     }
 }

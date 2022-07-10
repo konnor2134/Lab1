@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.budko.tasks;
+package ua.edu.sumdu.j2se.budko.tasks.model;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -19,6 +19,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
 
             System.arraycopy(tasksCopy, 0, tasks, 0, tasksCopy.length);
         }
+
         tasks[size] = task;
         size++;
     }
@@ -91,6 +92,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         public void remove() {
             if (lastReturned < 0)
                 throw new IllegalStateException();
+
             ArrayTaskList.this.remove(getTask(lastReturned));
             cursor = lastReturned;
             lastReturned = -1;
@@ -103,6 +105,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         if (o == null || getClass() != o.getClass()) return false;
         ArrayTaskList that = (ArrayTaskList) o;
         if (size != that.size) return false;
+
         for (int i = 0; i < size; i++) {
             if (!tasks[i].equals(that.tasks[i]))
                 return false;
@@ -120,7 +123,6 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         return hash;
     }
 
-
     @Override
     public ArrayTaskList clone() throws CloneNotSupportedException {
         ArrayTaskList clone = (ArrayTaskList) super.clone();
@@ -134,11 +136,10 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ArrayTaskList{\n");
+
         for (Task task: this) {
-            stringBuilder.append(task).append(",").append("\n");
+            stringBuilder.append(task).append(";").append("\n");
         }
-        stringBuilder.append("}\n");
 
         return stringBuilder.toString();
     }

@@ -16,6 +16,7 @@
         <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -36,6 +37,7 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/junit/junit -->

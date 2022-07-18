@@ -35,7 +35,6 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         size++;
     }
 
-
     @Override
     public boolean remove(Task task) {
         for (Node temp = first; temp != null; temp = temp.next) {

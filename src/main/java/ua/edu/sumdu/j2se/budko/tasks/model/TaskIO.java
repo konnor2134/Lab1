@@ -2,10 +2,13 @@ package ua.edu.sumdu.j2se.budko.tasks.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.time.LocalDateTime;
 
 public class TaskIO {
+    private static final Logger LOG = Logger.getLogger(TaskIO.class);
     public static void write (AbstractTaskList tasks, OutputStream out) {
         try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
             oos.writeInt(tasks.size());
@@ -25,7 +28,7 @@ public class TaskIO {
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Can't write", e);
         }
     }
 
@@ -58,7 +61,7 @@ public class TaskIO {
             }
         }
         catch (IOException | ClassNotFoundException e){
-            e.printStackTrace();
+            LOG.error("Can't read, class not find", e);
         }
     }
 
@@ -67,7 +70,7 @@ public class TaskIO {
             write(tasks, fileOutputStream);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Can't write binary", e);
         }
     }
 
@@ -76,7 +79,7 @@ public class TaskIO {
             read(tasks, fileInputStream);
         }
         catch (IOException e){
-            e.printStackTrace();
+            LOG.error("Can't read binary", e);
         }
     }
 
@@ -89,7 +92,7 @@ public class TaskIO {
             fileWriter.write(gson.toJson(tasks.getStream().toArray(Task[]::new)));
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Can't file write", e);
         }
     }
 
@@ -102,7 +105,7 @@ public class TaskIO {
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Can't file read", e);
         }
     }
 
@@ -111,7 +114,7 @@ public class TaskIO {
             write(tasks, fileWriter);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Can't write text", e);
         }
     }
 
@@ -120,7 +123,7 @@ public class TaskIO {
             read(tasks, fileReader);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Can't read text", e);
         }
     }
 }

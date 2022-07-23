@@ -7,11 +7,9 @@ import ua.edu.sumdu.j2se.budko.tasks.view.Notification;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 public class NotificationThread extends Thread {
-    private static final Logger log = Logger.getLogger(Controller.class);
+    private static final Logger LOG = Logger.getLogger(NotificationThread.class);
 
     private AbstractTaskList taskList;
     private Notification notification;
@@ -21,7 +19,7 @@ public class NotificationThread extends Thread {
         super("NotificationThread");
         this.taskList = taskList;
 
-        log.info("Notification created.");
+        LOG.info("Notification created.");
     }
 
     public void setTaskList(AbstractTaskList taskList) {
@@ -42,7 +40,8 @@ public class NotificationThread extends Thread {
                 try {
                     time = task.nextTimeAfter(LocalDateTime.now());
                 }
-                catch (NullPointerException npe) {
+                catch (NullPointerException e) {
+                    LOG.error("Cannot be null",e);
                 }
                 if (time != null) {
                     sec = seconds.between(LocalDateTime.now(), time);
@@ -53,9 +52,9 @@ public class NotificationThread extends Thread {
                                 lastTask = task.clone();
                             }
                             catch (CloneNotSupportedException e) {
-                                log.error("Failed to clone task.");
+                                LOG.error("Failed to clone task.");
                             }
-                            log.info("The user is notified about " + task.getTitle());
+                            LOG.info("The user is notified about " + task.getTitle());
                         }
                     }
                 }

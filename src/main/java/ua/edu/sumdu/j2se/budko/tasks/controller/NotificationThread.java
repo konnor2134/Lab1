@@ -9,7 +9,11 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class NotificationThread extends Thread {
+
+    private static final Logger LOG = Logger.getLogger(NotificationThread.class);
+
     private static final Logger LOG = Logger.getLogger(Controller.class);
+
 
     private AbstractTaskList taskList;
     private Notification notification;
@@ -40,7 +44,8 @@ public class NotificationThread extends Thread {
                 try {
                     time = task.nextTimeAfter(LocalDateTime.now());
                 }
-                catch (NullPointerException npe) {
+                catch (NullPointerException e) {
+                    LOG.error("Cannot be null",e);
                 }
                 if (time != null) {
                     sec = seconds.between(LocalDateTime.now(), time);

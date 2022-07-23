@@ -32,14 +32,17 @@ public abstract class Controller {
         try {
             Task task = view.addTask();
             if (task == null) {
-                throw new NullPointerException();
+                throw new NullPointerException("Cannot be null");
             }
             taskList.add(task);
             LOG.info("Task " + task.getTitle() + " added.");
         }
         catch (NullPointerException e) {
             view.showMessage("Operation canceled.");
+
+
             LOG.info("Operation canceled");
+
         }
 
         notificationThread.setTaskList(taskList);

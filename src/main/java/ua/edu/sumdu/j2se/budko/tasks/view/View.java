@@ -24,7 +24,7 @@ public class View {
         REPEAT_INTERVAL
     }
     Scanner reader;
-    private static final Logger log = Logger.getLogger(View.class);
+    private static final Logger LOG = Logger.getLogger(View.class);
 
     public int getAction() {
         reader = new Scanner(System.in);
@@ -78,7 +78,7 @@ public class View {
             }
             while (startTime.isAfter(endTime)) {
                 System.out.println("The task cannot end before it started");
-                log.info("The task cannot end before it started");
+                LOG.info("The task cannot end before it started");
                 endTime = inputDate();
             }
             System.out.println("Enter the iteration interval (in seconds): ");
@@ -103,12 +103,12 @@ public class View {
             if (Objects.equals(task.getTitle(), title)) {
                 taskList.remove(task);
                 System.out.println("Task " + task.getTitle() + " deleted");
-                log.info("Task " + task.getTitle() + " deleted");
+                LOG.info("Task " + task.getTitle() + " deleted");
                 return;
             }
         }
         System.out.println("Task " + title + " not found");
-        log.info("Task " + title + " not found");
+        LOG.info("Task " + title + " not found");
     }
 
     public void changeTask(AbstractTaskList taskList) {
@@ -185,17 +185,17 @@ public class View {
                     }
                 }
                 System.out.println("At the task " + title + " changed " + changeType + " on " + result);
-                log.info("At the task " + title + " changed " + changeType + " on " + result);
+                LOG.info("At the task " + title + " changed " + changeType + " on " + result);
                 return;
             }
         }
         System.out.println("Task " + title + " not found");
-        log.info("Task " + title + " not found.");
+        LOG.info("Task " + title + " not found.");
     }
 
     public void showTasks(AbstractTaskList taskList) {
         System.out.println(taskList);
-        log.info("Showing all tasks");
+        LOG.info("Showing all tasks");
         System.out.println("Enter any character");
         reader.nextLine();
     }
@@ -218,7 +218,7 @@ public class View {
         while (start.isAfter(end)) {
 
             System.out.println("The task cannot end before it started");
-            log.info("The task cannot end before it started");
+            LOG.info("The task cannot end before it started");
             end = inputDate();
 
         }
@@ -257,7 +257,7 @@ public class View {
             }
             catch (DateTimeParseException e) {
                 System.out.println("Enter the date in the correct format (format: dd-MM-yyyy HH:mm): ");
-                log.info("Wrong date format.");
+                LOG.info("Wrong date format.");
             }
         }
     }

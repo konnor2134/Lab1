@@ -9,7 +9,11 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class NotificationThread extends Thread {
+
     private static final Logger LOG = Logger.getLogger(NotificationThread.class);
+
+    private static final Logger LOG = Logger.getLogger(Controller.class);
+
 
     private AbstractTaskList taskList;
     private Notification notification;

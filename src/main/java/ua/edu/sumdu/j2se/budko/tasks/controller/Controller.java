@@ -39,6 +39,10 @@ public abstract class Controller {
         }
         catch (NullPointerException e) {
             view.showMessage("Operation canceled.");
+
+
+            LOG.info("Operation canceled");
+
         }
 
         notificationThread.setTaskList(taskList);

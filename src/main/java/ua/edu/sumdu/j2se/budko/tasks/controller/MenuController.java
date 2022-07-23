@@ -8,7 +8,7 @@ import ua.edu.sumdu.j2se.budko.tasks.view.View;
 import java.io.File;
 
 public class MenuController extends Controller {
-    private static final Logger log = Logger.getLogger(MenuController.class);
+    private static final Logger LOG = Logger.getLogger(MenuController.class);
 
     public MenuController(View view, AbstractTaskList taskList) {
         super(view, taskList);

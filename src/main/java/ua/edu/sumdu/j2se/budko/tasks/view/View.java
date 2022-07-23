@@ -257,7 +257,11 @@ public class View {
             }
             catch (DateTimeParseException e) {
                 System.out.println("Enter the date in the correct format (format: dd-MM-yyyy HH:mm): ");
+
                 LOG.info("Wrong date format.");
+
+                log.info("Wrong date format.");
+
             }
         }
     }

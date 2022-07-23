@@ -124,7 +124,7 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
 
             Node lastNext = lastReturned.next;
             LinkedTaskList.this.remove(lastReturned.task);
-            if (next == lastReturned)
+            if (next.equals(lastReturned))
                 next = lastNext;
             else
                 nextIndex--;

@@ -10,7 +10,7 @@ import ua.edu.sumdu.j2se.budko.tasks.view.View;
 import java.io.File;
 
 public abstract class Controller {
-    private static final Logger log = Logger.getLogger(Controller.class);
+    private static final Logger LOG = Logger.getLogger(Controller.class);
     protected View view;
     protected AbstractTaskList taskList;
     protected int action = -1;
@@ -35,11 +35,11 @@ public abstract class Controller {
                 throw new NullPointerException();
             }
             taskList.add(task);
-            log.info("Task " + task.getTitle() + " added.");
+            LOG.info("Task " + task.getTitle() + " added.");
         }
         catch (NullPointerException e) {
             view.showMessage("Operation canceled.");
-            log.info("Operation canceled");
+            LOG.info("Operation canceled");
         }
 
         notificationThread.setTaskList(taskList);
@@ -96,11 +96,11 @@ public abstract class Controller {
     private void backMenu() {
         try {
             Thread.sleep(1000);
-            log.info("Sleep succeeded.");
+            LOG.info("Sleep succeeded.");
         }
         catch (InterruptedException e) {
             System.out.println("Error. Return to main menu");
-            log.error("Sleep failed.");
+            LOG.error("Sleep failed.");
         }
         finally {
             mainMenu();

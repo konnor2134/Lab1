@@ -36,6 +36,7 @@ public class NotificationThread extends Thread {
 
     @Override
     public void run() {
+        final int timeNotification = 3600;
         ChronoUnit seconds = ChronoUnit.SECONDS;
         long sec;
         LocalDateTime time = null;
@@ -49,7 +50,7 @@ public class NotificationThread extends Thread {
                 }
                 if (time != null) {
                     sec = seconds.between(LocalDateTime.now(), time);
-                    if (sec <= 10800) {
+                    if (sec <= timeNotification) {
                         if (lastTask == null || time.minusSeconds(sec).isAfter(lastTask.getTime())) {
                             notification.display(sec, task.getTitle());
                             try {

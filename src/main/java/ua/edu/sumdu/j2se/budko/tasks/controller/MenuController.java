@@ -30,7 +30,7 @@ public class MenuController extends Controller {
             case CALENDAR: calendar();
                 break;
             case FINISH:
-                TaskIO.writeBinary(taskList, new File("tasks.txt"));
+                TaskIO.writeBinary(taskList, new File(fileTask));
                 System.out.println("\nThank you for using our program! Good day!");
                 System.exit(0);
                 break;

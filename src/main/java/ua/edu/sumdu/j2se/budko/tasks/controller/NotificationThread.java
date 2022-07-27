@@ -15,6 +15,10 @@ public class NotificationThread extends Thread {
     private Notification notification;
     private Task lastTask;
 
+    /**
+     * Metod for creating notification.
+     */
+
     public NotificationThread(AbstractTaskList taskList) {
         super("NotificationThread");
         this.taskList = taskList;
@@ -22,13 +26,25 @@ public class NotificationThread extends Thread {
         LOG.info("Notification created.");
     }
 
+    /**
+     * Metod for set task list.
+     */
+
     public void setTaskList(AbstractTaskList taskList) {
         this.taskList = taskList;
     }
 
+    /**
+     * Metod for registration notification.
+     */
+
     public void register(Notification notification) {
         this.notification = notification;
     }
+
+    /**
+     * Method to rub reminder action.
+     */
 
     @Override
     public void run() {

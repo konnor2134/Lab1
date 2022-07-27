@@ -24,7 +24,11 @@ public class View {
         REPEAT_INTERVAL
     }
     Scanner reader;
-    private static final Logger log = Logger.getLogger(View.class);
+    private static final Logger LOG = Logger.getLogger(View.class);
+
+    /**
+     * Return action in class
+     */
 
     public int getAction() {
         reader = new Scanner(System.in);
@@ -48,6 +52,10 @@ public class View {
         return value;
     }
 
+    /**
+     * Method for adding tasks.
+     */
+
     public Task addTask() {
         Task task;
         System.out.println("Enter the name of the task (0 - cancel):");
@@ -58,7 +66,7 @@ public class View {
         System.out.println("Does the task run more than once? (true/false)");
         boolean repeat = Boolean.parseBoolean(reader.nextLine());
         if (!repeat) {
-            System.out.println("Enter a due date for the task (format: dd-MM-yyyy HH:mm:ss) (0 - cancel): ");
+            System.out.println("Enter a due date for the task (format: dd-MM-yyyy HH:mm) (0 - cancel): ");
             LocalDateTime time = inputDate();
             if (time == null) {
                 return null;
@@ -66,19 +74,19 @@ public class View {
             task = new Task(title, time);
         }
         else {
-            System.out.println("Enter the start date for the task (format: dd-MM-yyyy HH:mm:ss) (0 - cancel): ");
+            System.out.println("Enter the start date for the task (format: dd-MM-yyyy HH:mm) (0 - cancel): ");
             LocalDateTime startTime = inputDate();
             if (startTime == null) {
                 return null;
             }
-            System.out.println("Enter the end date for the task (format: dd-MM-yyyy HH:mm:ss) (0 - cancel): ");
+            System.out.println("Enter the end date for the task (format: dd-MM-yyyy HH:mm) (0 - cancel): ");
             LocalDateTime endTime = inputDate();
             if (endTime == null) {
                 return null;
             }
             while (startTime.isAfter(endTime)) {
                 System.out.println("The task cannot end before it started");
-                log.info("The task cannot end before it started");
+                LOG.info("The task cannot end before it started");
                 endTime = inputDate();
             }
             System.out.println("Enter the iteration interval (in seconds): ");
@@ -92,6 +100,10 @@ public class View {
         return task;
     }
 
+    /**
+     * Method for removing tasks.
+     */
+
     public void removeTask(AbstractTaskList taskList) {
         System.out.println("Enter the name of the task to delete (0 - cancel): ");
         String title = reader.nextLine();
@@ -103,13 +115,17 @@ public class View {
             if (Objects.equals(task.getTitle(), title)) {
                 taskList.remove(task);
                 System.out.println("Task " + task.getTitle() + " deleted");
-                log.info("Task " + task.getTitle() + " deleted");
+                LOG.info("Task " + task.getTitle() + " deleted");
                 return;
             }
         }
         System.out.println("Task " + title + " not found");
-        log.info("Task " + title + " not found");
+        LOG.info("Task " + title + " not found");
     }
+
+    /**
+     * Method for changing tasks.
+     */
 
     public void changeTask(AbstractTaskList taskList) {
         System.out.println("Enter the name of the task to edit (0 - cancel): ");
@@ -156,20 +172,20 @@ public class View {
                             changeType = ChangeType.ACTIVE;
                             break;
                         case 3:
-                            System.out.println("Enter a due date for the task (format: dd-MM-yyyy HH:mm:ss) :");
+                            System.out.println("Enter a due date for the task (format: dd-MM-yyyy HH:mm) :");
                             dateTime = inputDate();
                             task.setTime(dateTime);
                             changeType = ChangeType.TIME;
                             break;
                         case 4:
-                            System.out.println("Enter the start date for the task(format: dd-MM-yyyy HH:mm:ss) : ");
+                            System.out.println("Enter the start date for the task(format: dd-MM-yyyy HH:mm) : ");
                             dateTime = inputDate();
                             task.setTime(dateTime, task.getEndTime(), task.getRepeatInterval());
                             changeType = ChangeType.START_TIME;
                             break;
 
                         case 5:
-                            System.out.println("Enter the end date for the task (format: dd-MM-yyyy HH:mm:ss) : ");
+                            System.out.println("Enter the end date for the task (format: dd-MM-yyyy HH:mm) : ");
                             dateTime = inputDate();
                             task.setTime(task.getStartTime(), dateTime, task.getRepeatInterval());
                             changeType = ChangeType.END_TIME;
@@ -185,20 +201,28 @@ public class View {
                     }
                 }
                 System.out.println("At the task " + title + " changed " + changeType + " on " + result);
-                log.info("At the task " + title + " changed " + changeType + " on " + result);
+                LOG.info("At the task " + title + " changed " + changeType + " on " + result);
                 return;
             }
         }
         System.out.println("Task " + title + " not found");
-        log.info("Task " + title + " not found.");
+        LOG.info("Task " + title + " not found.");
     }
+
+    /**
+     * Method for showing tasks.
+     */
 
     public void showTasks(AbstractTaskList taskList) {
         System.out.println(taskList);
-        log.info("Showing all tasks");
+        LOG.info("Showing all tasks");
         System.out.println("Enter any character");
         reader.nextLine();
     }
+    
+    /**
+     * Method for using main menu.
+     */
 
     public void mainMenu() {
         System.out.println("1. Show all tasks");
@@ -209,16 +233,20 @@ public class View {
         System.out.println("0. Exit");
     }
 
+    /**
+     * Method for showing dates in given period.
+     */
+
     public void calendar(AbstractTaskList taskList) {
-        System.out.println("Enter the first date on the calendar (format: dd-MM-yyyy HH:mm:ss) : ");
+        System.out.println("Enter the first date on the calendar (format: dd-MM-yyyy HH:mm) : ");
         LocalDateTime start = inputDate();
 
-        System.out.println("Enter the last date on the calendar (format: dd-MM-yyyy HH:mm:ss) : ");
+        System.out.println("Enter the last date on the calendar (format: dd-MM-yyyy HH:mm) : ");
         LocalDateTime end = inputDate();
         while (start.isAfter(end)) {
 
             System.out.println("The task cannot end before it started");
-            log.info("The task cannot end before it started");
+            LOG.info("The task cannot end before it started");
             end = inputDate();
 
         }
@@ -232,7 +260,7 @@ public class View {
         Object[] tasks;
         for (SortedMap.Entry<LocalDateTime, Set<Task>> entry : sortedMap.entrySet()) {
             tasks = entry.getValue().toArray();
-            System.out.print(entry.getKey().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss",forLanguageTag("eng"))) + " | ");
+            System.out.print(entry.getKey().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm",forLanguageTag("eng"))) + " | ");
             for (int i = 0; i < tasks.length; i++) {
                 if (i + 1 == tasks.length) {
                     System.out.print(((Task) tasks[i]).getTitle() + ".");
@@ -253,14 +281,20 @@ public class View {
                 if ("0".equals(date)) {
                     return null;
                 }
-                return LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+                return LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
             }
             catch (DateTimeParseException e) {
-                System.out.println("Enter the date in the correct format (format: dd-MM-yyyy HH:mm:ss): ");
-                log.info("Wrong date format.");
+                System.out.println("Enter the date in the correct format (format: dd-MM-yyyy HH:mm): ");
+
+                LOG.info("Wrong date format.");
+
             }
         }
     }
+
+    /**
+     * Method for showing messages.
+     */
 
     public void showMessage(String message) {
         System.out.println(message);

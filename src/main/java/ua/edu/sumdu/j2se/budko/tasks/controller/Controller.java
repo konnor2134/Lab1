@@ -30,6 +30,10 @@ public abstract class Controller {
 
     public abstract void process(Functional actions);
 
+    /**
+     * Method for adding tasks.
+     */
+
     public void addTask() {
         try {
             Task task = view.addTask();
@@ -48,6 +52,10 @@ public abstract class Controller {
         backMenu();
     }
 
+    /**
+     * Method for removing tasks.
+     */
+
     public void removeTask() {
         view.removeTask(taskList);
 
@@ -55,6 +63,10 @@ public abstract class Controller {
         TaskIO.writeBinary(taskList, new File(fileTask));
         backMenu();
     }
+
+    /**
+     * Method for changing tasks.
+     */
 
     public void changeTask() {
         view.changeTask(taskList);
@@ -64,15 +76,27 @@ public abstract class Controller {
         backMenu();
     }
 
+    /**
+     * Method for showing all tasks.
+     */
+
     public void showTasks() {
         view.showTasks(taskList);
         mainMenu();
     }
 
+    /**
+     * Method for showing dates in given period.
+     */
+
     public void calendar() {
         view.calendar(taskList);
         mainMenu();
     }
+
+    /**
+     * Method for using main menu.
+     */
 
     public void mainMenu() {
         view.mainMenu();

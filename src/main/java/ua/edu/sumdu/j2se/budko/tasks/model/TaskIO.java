@@ -7,8 +7,17 @@ import org.apache.log4j.Logger;
 import java.io.*;
 import java.time.LocalDateTime;
 
+/**
+ * This class contains methods for reading and writing to a file.
+ */
+
 public class TaskIO {
     private static final Logger LOG = Logger.getLogger(TaskIO.class);
+
+    /**
+     * Writes tasks from the list to the stream in the binary format.
+     */
+
     public static void write (AbstractTaskList tasks, OutputStream out) {
         try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
             oos.writeInt(tasks.size());
@@ -31,6 +40,10 @@ public class TaskIO {
             LOG.error("Can't write", e);
         }
     }
+
+    /**
+     * Reads tasks from the stream to this task list.
+     */
 
     public static void read (AbstractTaskList tasks, InputStream in) {
         try (ObjectInputStream ois = new ObjectInputStream(in)) {
@@ -65,6 +78,10 @@ public class TaskIO {
         }
     }
 
+    /**
+     * Writes tasks from the list to a file.
+     */
+
     public static void writeBinary(AbstractTaskList tasks, File file) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
             write(tasks, fileOutputStream);
@@ -74,6 +91,10 @@ public class TaskIO {
         }
     }
 
+    /**
+     * Reads tasks from the file to the task list.
+     */
+
     public static void readBinary (AbstractTaskList tasks, File file) {
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             read(tasks, fileInputStream);
@@ -82,6 +103,10 @@ public class TaskIO {
             LOG.error("Can't read binary", e);
         }
     }
+
+    /**
+     * Writes tasks from the list to the stream in JSON format.
+     */
 
     public static void write (AbstractTaskList tasks, Writer out) {
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -96,6 +121,10 @@ public class TaskIO {
         }
     }
 
+    /**
+     * Reads tasks from the stream to the list.
+     */
+
     public static void read (AbstractTaskList tasks, Reader in){
         Gson gson = new Gson();
 
@@ -109,6 +138,10 @@ public class TaskIO {
         }
     }
 
+    /**
+     * Writes tasks to a file in JSON format
+     */
+
     public static void writeText (AbstractTaskList tasks, File file){
         try (FileWriter fileWriter = new FileWriter(file)) {
             write(tasks, fileWriter);
@@ -117,6 +150,10 @@ public class TaskIO {
             LOG.error("Can't write text", e);
         }
     }
+
+    /**
+     * Reads tasks from a file
+     */
 
     public static void readText (AbstractTaskList tasks, File file) {
         try (FileReader fileReader = new FileReader(file)) {

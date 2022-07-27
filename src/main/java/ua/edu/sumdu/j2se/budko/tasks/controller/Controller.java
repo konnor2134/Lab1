@@ -7,15 +7,17 @@ import ua.edu.sumdu.j2se.budko.tasks.model.TaskIO;
 import ua.edu.sumdu.j2se.budko.tasks.view.Notification;
 import ua.edu.sumdu.j2se.budko.tasks.view.View;
 
+
 import java.io.File;
 
 public abstract class Controller {
+
     private static final Logger LOG = Logger.getLogger(Controller.class);
     protected View view;
     protected AbstractTaskList taskList;
     protected int action = -1;
     protected NotificationThread notificationThread;
-
+    final String fileTask = "tasks.txt";
     public Controller(View view, AbstractTaskList taskList) {
         this.view = view;
         this.taskList = taskList;
@@ -42,7 +44,7 @@ public abstract class Controller {
         }
 
         notificationThread.setTaskList(taskList);
-        TaskIO.writeBinary(taskList, new File("tasks.txt"));
+        TaskIO.writeBinary(taskList, new File(fileTask));
         backMenu();
     }
 
@@ -50,7 +52,7 @@ public abstract class Controller {
         view.removeTask(taskList);
 
         notificationThread.setTaskList(taskList);
-        TaskIO.writeBinary(taskList, new File("tasks.txt"));
+        TaskIO.writeBinary(taskList, new File(fileTask));
         backMenu();
     }
 
@@ -58,7 +60,7 @@ public abstract class Controller {
         view.changeTask(taskList);
 
         notificationThread.setTaskList(taskList);
-        TaskIO.writeBinary(taskList, new File("tasks.txt"));
+        TaskIO.writeBinary(taskList, new File(fileTask));
         backMenu();
     }
 
@@ -105,4 +107,5 @@ public abstract class Controller {
             mainMenu();
         }
     }
+
 }

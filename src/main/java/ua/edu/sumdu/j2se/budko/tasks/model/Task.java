@@ -19,9 +19,9 @@ public class Task implements Cloneable, Serializable {
     }
 
     /**
-     * Конструктор - создает неактивную задачу, которая выполняется за время без повторения с заданным названием.
-     * @param title - название задачи.
-     * @param time - время выполнения.
+     * Constructor - creates an inactive task that runs in time without repetition with a given name.
+     * @param title - task title.
+     * @param time - execution time.
      */
 
     public Task(String title, LocalDateTime time) {
@@ -36,11 +36,11 @@ public class Task implements Cloneable, Serializable {
     }
 
     /**
-     * Конструктор - создает неактивную задачу, выполняемую в промежутке времени  с интервалом и имеющее заданное название.
-     * @param title - название задачи.
-     * @param start - время начала выполнения задачи.
-     * @param end - время конца выполнения задачи.
-     * @param interval - интервал повторений выполнения задачи.
+     * Constructor - creates an inactive task that runs in a period of time with an interval and has a given name.
+     * @param title - task title.
+     * @param start - task execution start time.
+     * @param end - end time of task execution.
+     * @param interval - task repetition interval.
      */
 
     public Task(String title, LocalDateTime start, LocalDateTime end, int interval)  {
@@ -53,6 +53,10 @@ public class Task implements Cloneable, Serializable {
         this.interval = interval;
         time = start;
     }
+
+    /**
+     * The equals() method compares two strings, and returns true if the strings are equal, and false if not.
+     */
 
     @Override
     public boolean equals(Object o) {
@@ -71,6 +75,10 @@ public class Task implements Cloneable, Serializable {
 
     }
 
+    /**
+     * Function that returns the hashcode value of an object on calling.
+     */
+
     @Override
     public int hashCode() {
         return Objects.hash(title, time, interval, active);
@@ -80,6 +88,10 @@ public class Task implements Cloneable, Serializable {
     public Task clone() throws CloneNotSupportedException {
         return (Task) super.clone();
     }
+
+    /**
+     * Transforms object to a string.
+     */
 
     @Override
     public String toString() {
@@ -97,51 +109,52 @@ public class Task implements Cloneable, Serializable {
         }
     }
     /**
-     * Возвращает название задачи.
-     * @return название задачи.
+     * Returns the name of the task.
+     * @return task name.
      */
 
     public String getTitle () {
             return title;
         }
+
     /**
-    * Устанавливает название задачи.
-    * @param title - название задачи.
-    */
+     * Sets the name of the task.
+     * @param title - task title.
+     */
 
     public void setTitle (String title){
         this.title = title;
     }
 
     /**
-    * @return - возвращает состояние активности задачи.
-    */
+     * @return - returns the activity state of the task.
+     */
 
     public boolean isActive () {
             return active;
         }
 
     /**
-    * Устанавливает активность задачи.
-    * @param active – true означает, что задача становится активной, false – неактивна.
-    */
+     * Sets the activity of the task.
+     * @param active - true means that the task becomes active, false - inactive.
+     */
 
     public void setActive ( boolean active){
             this.active = active;
         }
 
     /**
-    * Метод для работы со временем у неповторяющихся задач.
-    * @return - возвращает время выполнения задачи. Если задача повторяемая – возвращает время начала выполнения задачи.
-    */
+     * A method for working with time for non-recurring tasks.
+     * @return - returns the execution time of the task. If the task is repeatable, returns the start time of the task.
+     */
 
     public LocalDateTime getTime () {
             return time;
         }
 
     /**
-    * Метод, при котором если задача повторялась, она должна стать такой, что не повторяется.
-    */
+     * A method whereby if a task has been repeated, it must become such that it does not repeat itself.
+     */
 
     public void setTime (LocalDateTime time){
         this.time = time;
@@ -154,23 +167,23 @@ public class Task implements Cloneable, Serializable {
     }
 
     /**
-    * В случае, если задача не повторяется, метод должен возвращать время выполнения задачи.
-    */
+     * In case the task is not repeated, the method should return the task execution time.
+     */
 
     public LocalDateTime getStartTime () {
             return start;
         }
     /**
-    * В случае, если задача не повторяется, метод должен возвращать время выполнения задачи.
-    */
+     * In case the task is not repeated, the method should return the task execution time.
+     */
 
     public LocalDateTime getEndTime () {
             return end;
         }
 
     /**
-    * В случае, если задача не повторяется, метод должен возвращать 0.
-    */
+     * In case the task is not repeated, the method should return 0.
+     */
 
     public int getRepeatInterval () {
 
@@ -178,8 +191,8 @@ public class Task implements Cloneable, Serializable {
     }
 
     /**
-    * В случае, если задача не повторяется, метод должен стать повторяющимся.
-    */
+     * In case the task is not repetitive, the method should become repetitive.
+     */
 
     public void setTime (LocalDateTime start, LocalDateTime end,int interval){
         if (this.interval == 0)
@@ -194,6 +207,11 @@ public class Task implements Cloneable, Serializable {
     public boolean isRepeated () {
             return interval != 0;
         }
+
+    /**
+     * Returns the time of the next task after the specified time.
+     * @return next task time if the task run after the specified time, null if the task doesn't.
+     */
 
     public LocalDateTime nextTimeAfter (LocalDateTime current){
         if (current == null)

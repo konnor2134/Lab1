@@ -6,6 +6,11 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Tasks {
+
+    /**
+     * Saves tasks to the collection.
+     */
+
     public static Iterable<Task> incoming(Iterable<Task> tasks, LocalDateTime start, LocalDateTime end) {
         if (tasks == null || start == null || end == null || start.isAfter(end))
             throw new IllegalArgumentException();
@@ -18,6 +23,12 @@ public class Tasks {
                 .forEach(taskList::add);
         return taskList;
     }
+
+    /**
+     * Build a calendar of tasks for a given period - a table where each date corresponds
+     * to a set of tasks to be performed at this time, and one task can occur according to several dates,
+     * if it must be performed several times during the specified period.
+     */
 
     public static SortedMap<LocalDateTime, Set<Task>> calendar(
             Iterable<Task> tasks, LocalDateTime start, LocalDateTime end) {

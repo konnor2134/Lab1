@@ -1,5 +1,9 @@
 package ua.edu.sumdu.j2se.budko.tasks.controller;
 
+/**
+ * Application functionality.
+ */
+
 public enum Functional {
     EMPTY,
     FINISH,

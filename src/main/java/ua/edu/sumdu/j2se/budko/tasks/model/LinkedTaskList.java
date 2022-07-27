@@ -3,6 +3,10 @@ package ua.edu.sumdu.j2se.budko.tasks.model;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+/**
+ * Class for storing tasks in linked list.
+ */
+
 public class LinkedTaskList extends AbstractTaskList implements Cloneable {
     private Node first;
     private Node last;
@@ -17,6 +21,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
             this.task = task;
         }
     }
+
+    /**
+     * Method for adding tasks.
+     */
 
     @Override
     public void add(Task task) throws NullPointerException {
@@ -34,6 +42,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         last = node;
         size++;
     }
+
+    /**
+     * Method for removing tasks.
+     */
 
     @Override
     public boolean remove(Task task) {
@@ -59,11 +71,18 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
 
         return false;
     }
+    /**
+     * Counts list size.
+     */
 
     @Override
     public int size() {
         return size;
     }
+
+    /**
+     * Return task on index from list.
+     */
 
     @Override
     public Task getTask(int index) throws IndexOutOfBoundsException {
@@ -101,10 +120,18 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         Node next = first;
         int nextIndex;
 
+        /**
+         * returns value if the iteration has more elements
+         */
+
         @Override
         public boolean hasNext() {
             return nextIndex < size;
         }
+
+        /**
+         * Returns the next element in the iteration.
+         */
 
         @Override
         public Task next() {
@@ -116,6 +143,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
             nextIndex++;
             return lastReturned.task;
         }
+
+        /**
+         * Removes the current item.
+         */
 
         @Override
         public void remove() {
@@ -132,6 +163,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         }
     }
 
+    /**
+     * The equals() method compares two strings, and returns true if the strings are equal, and false if not.
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -146,6 +181,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
 
         return true;
     }
+
+    /**
+     * Function that returns the hashcode value of an object on calling.
+     */
 
     @Override
     public int hashCode() {
@@ -171,6 +210,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
             return clone;
         }
 
+    /**
+     * Transforms object to a string.
+     */
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -181,6 +224,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
 
         return stringBuilder.toString();
     }
+
+    /**
+     * Transforms list to stream and returns stream.
+     */
 
     @Override
     public Stream<Task> getStream() {

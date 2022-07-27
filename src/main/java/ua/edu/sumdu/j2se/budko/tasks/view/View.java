@@ -26,6 +26,10 @@ public class View {
     Scanner reader;
     private static final Logger LOG = Logger.getLogger(View.class);
 
+    /**
+     * Return action in class
+     */
+
     public int getAction() {
         reader = new Scanner(System.in);
         int value = -1;
@@ -47,6 +51,10 @@ public class View {
         }
         return value;
     }
+
+    /**
+     * Method for adding tasks.
+     */
 
     public Task addTask() {
         Task task;
@@ -92,6 +100,10 @@ public class View {
         return task;
     }
 
+    /**
+     * Method for removing tasks.
+     */
+
     public void removeTask(AbstractTaskList taskList) {
         System.out.println("Enter the name of the task to delete (0 - cancel): ");
         String title = reader.nextLine();
@@ -110,6 +122,10 @@ public class View {
         System.out.println("Task " + title + " not found");
         LOG.info("Task " + title + " not found");
     }
+
+    /**
+     * Method for changing tasks.
+     */
 
     public void changeTask(AbstractTaskList taskList) {
         System.out.println("Enter the name of the task to edit (0 - cancel): ");
@@ -193,12 +209,20 @@ public class View {
         LOG.info("Task " + title + " not found.");
     }
 
+    /**
+     * Method for showing tasks.
+     */
+
     public void showTasks(AbstractTaskList taskList) {
         System.out.println(taskList);
         LOG.info("Showing all tasks");
         System.out.println("Enter any character");
         reader.nextLine();
     }
+    
+    /**
+     * Method for using main menu.
+     */
 
     public void mainMenu() {
         System.out.println("1. Show all tasks");
@@ -208,6 +232,10 @@ public class View {
         System.out.println("5. Calendar");
         System.out.println("0. Exit");
     }
+
+    /**
+     * Method for showing dates in given period.
+     */
 
     public void calendar(AbstractTaskList taskList) {
         System.out.println("Enter the first date on the calendar (format: dd-MM-yyyy HH:mm) : ");
@@ -260,11 +288,13 @@ public class View {
 
                 LOG.info("Wrong date format.");
 
-                log.info("Wrong date format.");
-
             }
         }
     }
+
+    /**
+     * Method for showing messages.
+     */
 
     public void showMessage(String message) {
         System.out.println(message);

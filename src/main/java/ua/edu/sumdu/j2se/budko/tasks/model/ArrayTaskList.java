@@ -4,9 +4,17 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+/**
+ * Class for storing tasks in array list.
+ */
+
 public class ArrayTaskList extends AbstractTaskList implements Cloneable {
     private Task[] tasks = new Task[10];
     private int size;
+
+    /**
+     * Add task to list.
+     */
 
     @Override
     public void add (Task task) throws NullPointerException {
@@ -23,6 +31,10 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         tasks[size] = task;
         size++;
     }
+
+    /**
+     * Remove task from list.
+     */
 
     @Override
     public boolean remove (Task task){
@@ -46,10 +58,18 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         return true;
     }
 
+    /**
+     * Counts list size.
+     */
+
     @Override
     public int size () {
         return size;
     }
+
+    /**
+     * Return task on index from list.
+     */
 
     @Override
     public Task getTask ( int index) throws IndexOutOfBoundsException {
@@ -73,10 +93,18 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         int cursor;
         int lastReturned = -1;
 
+        /**
+         * return if the iteration has more elements.
+         */
+
         @Override
         public boolean hasNext() {
             return cursor < size;
         }
+
+        /**
+         * Returns the next element in the iteration.
+         */
 
         @Override
         public Task next() {
@@ -99,6 +127,10 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         }
     }
 
+    /**
+     * The equals() method compares two strings, and returns true if the strings are equal, and false if not.
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -112,6 +144,10 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         }
         return true;
     }
+
+    /**
+     * Function that returns the hashcode value of an object on calling.
+     */
 
     @Override
     public int hashCode() {
@@ -133,6 +169,11 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         return clone;
     }
 
+    /**
+     * Transforms object to a string.
+     */
+
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -143,6 +184,10 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
 
         return stringBuilder.toString();
     }
+
+    /**
+     * Transforms list to stream and returns stream.
+     */
 
     @Override
     public Stream<Task> getStream() {
